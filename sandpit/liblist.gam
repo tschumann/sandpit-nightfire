@@ -1,0 +1,8 @@
+// Game Info file
+//  These are key/value pairs.  Certain mods will use different settings.
+//
+game "Sandpit: Nightfire"
+startmap "007intro"
+trainingmap "007demo"
+mpentity "info_player_deathmatch"
+gamedll "dlls\sandpit.dll"

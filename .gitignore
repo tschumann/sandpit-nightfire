@@ -1,0 +1,8 @@
+
+plugin/Debug
+plugin/Release
+
+.vs/
+*.ncb
+*.suo
+*.vcproj.*

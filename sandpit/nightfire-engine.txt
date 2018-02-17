@@ -1,0 +1,8 @@
+
+edict_s
+enginefuncs_t
+DLL_FUNCTIONS
+NEW_DLL_FUNCTIONS
+globalvars_t
+
+no CVoiceGameMgr
