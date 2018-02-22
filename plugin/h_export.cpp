@@ -13,7 +13,7 @@
 
 #include <io.h>
 
-HINSTANCE h_Library = NULL;
+HINSTANCE h_Library = nullptr;
 
 enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;

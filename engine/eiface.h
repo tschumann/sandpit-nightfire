@@ -100,8 +100,8 @@ typedef struct
 typedef struct enginefuncs_s
 {
 	void*		(*pfnCVarRegister)			(void *u1, void *u2, void *u3, void *u4, void *u5);
-	float		(*pfnCVarGetFloat)			(const char *szVarName);
 	void*		(*pfnUnknown1)				(void *u1);
+	float		(*pfnCVarGetFloat)			(const char *szVarName);
 	void*		(*pfnUnknown2)				(void *u1);
 	void*		(*pfnUnknown3)				(void *u1);
 	int			(*pfnPrecacheModel)			(char* s);

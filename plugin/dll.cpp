@@ -6,9 +6,6 @@
 #include "extdll.h"
 #include "util.h"
 
-#include "plugin.h"
-#include "plugin_empty.h"
-
 extern enginefuncs_t g_engfuncs;
 extern globalvars_t  *gpGlobals;
 
@@ -106,21 +103,35 @@ void ClientDisconnect( edict_t *pEntity )
 
 void ClientKill( edict_t *pEntity )
 {
-	Plugin_ClientPutInServer( pEntity );
+	ALERT( at_console, "%s was killed\n", pEntity->v.classname );
 
 	(*gFunctionTable.pfnClientKill)(pEntity);
 }
 
 void ClientPutInServer( edict_t *pEntity )
 {
-	Plugin_ClientPutInServer( pEntity );
+	// NOTE: classname is an empty string here because it isn't set until the game code
+	ALERT( at_console, "Put entity of type %s in server\n", STRING(pEntity->v.classname) );
 
 	(*gFunctionTable.pfnClientPutInServer)(pEntity);
 }
 
 void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 {
-	Plugin_ClientCommand( pEntity, u1, ppcmd );
+	if( FStrEq(ppcmd[0], "get_player_info") )
+	{
+		if( pEntity )
+		{
+			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
+			ALERT( at_console, "health: %d\n", pEntity->v.health );
+		}
+		else
+		{
+			ALERT( at_console, "no entity" );
+		}
+
+		return;
+	}
 
 	(*gFunctionTable.pfnClientCommand)(pEntity, u1, ppcmd);
 }

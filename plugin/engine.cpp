@@ -5,10 +5,6 @@
 
 #include "extdll.h"
 #include "util.h"
-#include "studio.h"
-
-#include "plugin.h"
-#include "plugin_empty.h"
 
 extern enginefuncs_t g_engfuncs;
 
@@ -36,12 +32,10 @@ void MessageEnd(void)
 
 int RegUserMsg(const char *pszName, int iSize)
 {
-#if 0
 	if( CVAR_GET_FLOAT("developer") )
 	{
 		ALERT( at_console, "pfnRegUserMsg: pszName=%s, iSize=%d\n", pszName, iSize );
 	}
-#endif
 
 	return (*g_engfuncs.pfnRegUserMsg)(pszName, iSize);
 }

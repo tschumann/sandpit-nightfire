@@ -151,8 +151,7 @@
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="h_export.cpp" />
     <ClCompile Include="linkfunc.cpp" />
-    <ClCompile Include="plugin_empty.cpp" />
-    <ClCompile Include="plugin_helper.cpp" />
+    <ClCompile Include="plugin.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +161,6 @@
     <ClInclude Include="..\dlls\vector.h" />
     <ClInclude Include="dll.h" />
     <ClInclude Include="engine.h" />
-    <ClInclude Include="plugin.h" />
-    <ClInclude Include="plugin_empty.h" />
-    <ClInclude Include="plugin_helper.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,4 +1,4 @@
-LIBRARY plugin_empty
+LIBRARY sandpit
 EXPORTS
 	GiveFnptrsToDll			@1
 SECTIONS
