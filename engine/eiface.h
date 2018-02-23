@@ -99,7 +99,7 @@ typedef struct
 // Engine hands this to DLLs for functionality callbacks
 typedef struct enginefuncs_s
 {
-	void*		(*pfnCVarRegister)			(CVAR_TYPE type, const char *szVarName, const char *szVarDesc, char *szValue, int flags);
+	cvar_t*		(*pfnCVarRegister)			(CVAR_TYPE type, const char *szVarName, const char *szVarDesc, char *szValue, int flags);
 	void*		(*pfnUnknown1)				(void *u1);
 	float		(*pfnCVarGetFloat)			(const char *szVarName);
 	void*		(*pfnUnknown2)				(void *u1);
@@ -144,8 +144,8 @@ typedef struct enginefuncs_s
 	void		(*pfnTraceModel)			(const float *v1, const float *v2, int hullNumber, edict_t *pent, TraceResult *ptr, int u1);
 	const char *(*pfnTraceTexture)			(edict_t *pTextureEntity, const float *v1, const float *v2 );
 	void		(*pfnGetAimVector)			(edict_t* ent, float speed, float *rgflReturn);
-	void*		(*pfnServerCommand)			(char* str);
-	void*		(*pfnUnknown41)				(void);
+	void		(*pfnServerCommand)			(char* str);
+	void		(*pfnServerExecute)			(void);
 	void		(*pfnClientCommand)			(edict_t* pEdict, const char* szFmt, ...);
 	void		(*pfnParticleEffect)		(const float *org, const float *dir, float color, float count, float f1, float f2);
 	void		(*pfnLightStyle)			(int style, const char* val);

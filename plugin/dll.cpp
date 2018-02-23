@@ -11,9 +11,13 @@ extern globalvars_t  *gpGlobals;
 
 DLL_FUNCTIONS gFunctionTable;
 
+cvar_t *sv_canspawnmonsters = nullptr;
+
 void GameDLLInit( void )
 {
-	CVAR_REGISTER(cvar_bool, "sv_canspawnmonsters", "Whether monsters can be spawned", "1", 0);
+	sv_canspawnmonsters = CVAR_REGISTER(cvar_bool, "sv_canspawnmonsters", "Whether monsters can be spawned", "1", 0);
+
+	ALERT( at_console, "%d %d %f %x\n", sv_canspawnmonsters->u1, sv_canspawnmonsters->flags, sv_canspawnmonsters->value );
 
 	(*gFunctionTable.pfnGameInit)();
 }

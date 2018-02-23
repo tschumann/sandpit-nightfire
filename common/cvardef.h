@@ -29,10 +29,11 @@ typedef enum { cvar_bool=0, cvar_int=1, cvar_float=2, cvar_string=3 } CVAR_TYPE;
 
 typedef struct cvar_s
 {
+	void	*u1;
 	char	*name;
 	char	*string;
 	int		flags;
 	float	value;
-	struct cvar_s *next;
+	struct cvar_s *next; // wrong
 } cvar_t;
 #endif
