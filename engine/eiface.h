@@ -99,7 +99,7 @@ typedef struct
 // Engine hands this to DLLs for functionality callbacks
 typedef struct enginefuncs_s
 {
-	void*		(*pfnCVarRegister)			(void *u1, void *u2, void *u3, void *u4, void *u5);
+	void*		(*pfnCVarRegister)			(CVAR_TYPE type, const char *szVarName, const char *szVarDesc, char *szValue, int flags);
 	void*		(*pfnUnknown1)				(void *u1);
 	float		(*pfnCVarGetFloat)			(const char *szVarName);
 	void*		(*pfnUnknown2)				(void *u1);

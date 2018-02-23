@@ -19,11 +19,7 @@ enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;
 
 #undef DLLEXPORT
-#ifdef _WIN32
 #define DLLEXPORT __stdcall
-#else
-#define DLLEXPORT __attribute__ ((visibility("default")))
-#endif
 
 extern DLL_FUNCTIONS gFunctionTable;
 
@@ -38,7 +34,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 	{
 		if( h_Library )
 		{
-			FreeLibrary(h_Library);
+			FreeLibrary( h_Library );
 		}
 	}
 
@@ -50,11 +46,12 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t *pGlobals )
 {
 	// keep a local copy of the engine functions
-	memcpy(&g_engfuncs, pengfuncsFromEngine, sizeof(enginefuncs_t));
+	memcpy( &g_engfuncs, pengfuncsFromEngine, sizeof(enginefuncs_t) );
 	// get the globals from the engine
 	gpGlobals = pGlobals;
 
-	h_Library = LoadLibrary( "bond/dlls/game.dll" ); // and load the library
+	// load the library
+	h_Library = LoadLibrary( "bond/dlls/game.dll" );
 
 	if( h_Library == NULL )
 	{
@@ -68,7 +65,7 @@ void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t
 	pengfuncsFromEngine->pfnRegUserMsg = RegUserMsg;
 
 	// pass the possibly overriden engine functions to the game .dll
-	(*(GIVEFNPTRSTODLL)GetProcAddress(h_Library, "GiveFnptrsToDll"))(pengfuncsFromEngine, pGlobals);
+	(*(GIVEFNPTRSTODLL)GetProcAddress( h_Library, "GiveFnptrsToDll" ))(pengfuncsFromEngine, pGlobals);
 
 	return; // finished, interfacing from gamedll to engine complete
 }
@@ -77,7 +74,7 @@ void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t
 extern "C" _declspec( dllexport ) int GetEntityAPI( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion )
 {
 	// check if engine's pointer is valid and version is correct...
-	if( (pFunctionTable == NULL) || (*interfaceVersion != INTERFACE_VERSION) )
+	if( !pFunctionTable || (*interfaceVersion != INTERFACE_VERSION) )
 	{
 		return FALSE;
 	}
@@ -136,37 +133,12 @@ extern "C" _declspec( dllexport ) int GetEntityAPI( DLL_FUNCTIONS *pFunctionTabl
 	pFunctionTable->pfnAllowLagCompensation = AllowLagCompensation;
 	pFunctionTable->pfnPlayerCustomization = PlayerCustomization;
 
-	// try to get the game .dll's function table and put it into gFunctionTable
-	if( !(*(GETENTITYAPI)GetProcAddress(h_Library, "GetEntityAPI"))(&gFunctionTable, interfaceVersion) )
-	{
-		return FALSE;  // error initializing function table!!!
-	}
-
-	return TRUE; // finished, interfacing from engine to gamedll complete
+	return (*(GETENTITYAPI)GetProcAddress( h_Library, "GetEntityAPI" ))(&gFunctionTable, interfaceVersion);
 }
 
 extern "C" _declspec( dllexport ) int GetNewDLLFunctions( NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion )
 {
-	static GETNEWDLLFUNCTIONS other_GetNewDLLFunctions = NULL;
-	static bool missing = FALSE;
-
-	// if the new DLL functions interface has been formerly reported as missing, give up
-	if (missing)
-		return FALSE;
-
-	// do we NOT know if the new DLL functions interface is provided ? if so, look for its address
-	if (other_GetNewDLLFunctions == NULL)
-		other_GetNewDLLFunctions = (GETNEWDLLFUNCTIONS)GetProcAddress(h_Library, "GetNewDLLFunctions");
-
-	// have we NOT found it ?
-	if (other_GetNewDLLFunctions == NULL)
-	{
-		missing = TRUE; // then mark it as missing, no use to look for it again in the future
-		return FALSE; // and give up
-	}
-
-	// else call the function that provides the new DLL functions interface on request
-	return (!(*other_GetNewDLLFunctions) (pFunctionTable, interfaceVersion));
+	return (*(GETNEWDLLFUNCTIONS)GetProcAddress( h_Library, "GetNewDLLFunctions" ))(pFunctionTable, interfaceVersion);
 }
 
 

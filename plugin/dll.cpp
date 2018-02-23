@@ -13,6 +13,8 @@ DLL_FUNCTIONS gFunctionTable;
 
 void GameDLLInit( void )
 {
+	CVAR_REGISTER(cvar_bool, "sv_canspawnmonsters", "Whether monsters can be spawned", "1", 0);
+
 	(*gFunctionTable.pfnGameInit)();
 }
 
@@ -103,16 +105,11 @@ void ClientDisconnect( edict_t *pEntity )
 
 void ClientKill( edict_t *pEntity )
 {
-	ALERT( at_console, "%s was killed\n", pEntity->v.classname );
-
 	(*gFunctionTable.pfnClientKill)(pEntity);
 }
 
 void ClientPutInServer( edict_t *pEntity )
 {
-	// NOTE: classname is an empty string here because it isn't set until the game code
-	ALERT( at_console, "Put entity of type %s in server\n", STRING(pEntity->v.classname) );
-
 	(*gFunctionTable.pfnClientPutInServer)(pEntity);
 }
 
