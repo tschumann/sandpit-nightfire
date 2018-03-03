@@ -24,6 +24,33 @@ void GameDLLInit( void )
 
 int DispatchSpawn( edict_t *pent )
 {
+	const char *szClassname = STRING(pent->v.classname);
+
+	if( !strcmp( szClassname, "worldspawn" ) )
+	{
+		PRECACHE_MODEL("models/ninja.mdl");
+		PRECACHE_MODEL("models/shell.mdl");
+
+		PRECACHE_SOUND("weapons/mp9_fire_sil1.wav");
+		PRECACHE_SOUND("weapons/mp9_fire_sil2.wav");
+		PRECACHE_SOUND("debris/beamstart1.wav");
+		PRECACHE_SOUND("ninja/nj_gravel1.wav");
+		PRECACHE_SOUND("ninja/nj_gravel2.wav");
+		PRECACHE_SOUND("ninja/nj_gravel3.wav");
+		PRECACHE_SOUND("ninja/nj_gravel4.wav");
+		PRECACHE_SOUND("ninja/nj_hidden_run1.wav");
+		PRECACHE_SOUND("ninja/nj_hidden_run2.wav");
+		PRECACHE_SOUND("ninja/nj_hidden_run3.wav");
+		PRECACHE_SOUND("ninja/nj_walk1.wav");
+		PRECACHE_SOUND("ninja/nj_walk2.wav");
+		PRECACHE_SOUND("ninja/nj_walk3.wav");
+		PRECACHE_SOUND("ninja/nj_walk4.wav");
+		PRECACHE_SOUND("ninja/swing.wav");
+		PRECACHE_SOUND("ninja/swing2.wav");
+
+		PRECACHE_EVENT( 1, "events/createsmoke.sc" );
+	}
+
 	return (*gFunctionTable.pfnSpawn)(pent);
 }
 
@@ -124,7 +151,10 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 		if( pEntity )
 		{
 			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
-			ALERT( at_console, "health: %d\n", pEntity->v.health );
+			// ALERT( at_console, "health: %d\n", pEntity->v.health );
+			ALERT( at_console, "origin: %f, %f, %f\n", pEntity->v.origin.x, pEntity->v.origin.y, pEntity->v.origin.z );
+			ALERT( at_console, "angles: %f, %f, %f\n", pEntity->v.angles.x, pEntity->v.angles.y, pEntity->v.angles.z );
+			ALERT( at_console, "v_angle: %f, %f, %f\n", pEntity->v.v_angle.x, pEntity->v.v_angle.y, pEntity->v.v_angle.z );
 		}
 		else
 		{
@@ -132,6 +162,17 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 		}
 
 		return;
+	}
+	else if ( FStrEq(ppcmd[0], "monster_create") )
+	{
+		if( ppcmd[2] )
+		{
+			UTIL_MakeVectors( Vector( 0, pEntity->v.v_angle.y, 0 ) );
+
+			Vector position = pEntity->v.origin + gpGlobals->v_forward * 128;
+
+			Create( ppcmd[2], position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
+		}
 	}
 
 	(*gFunctionTable.pfnClientCommand)(pEntity, u1, ppcmd);

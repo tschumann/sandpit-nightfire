@@ -1,6 +1,7 @@
 
 #include "extdll.h"
 #include "util.h"
+#include "dll.h"
 
 // from Half-Life's util.cpp
 void UTIL_MakeVectors( const Vector &vecAngles )
@@ -31,5 +32,23 @@ edict_t *FindEntityForward( edict_t *pMe )
 	{
 		return tr.pHit;
 	}
+
 	return nullptr;
+}
+
+edict_t* Create( const char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner )
+{
+	edict_t	*pent;
+
+	pent = CREATE_NAMED_ENTITY( MAKE_STRING( szName ));
+	if ( FNullEnt( pent ) )
+	{
+		ALERT ( at_console, "NULL Ent in Create!\n" );
+		return NULL;
+	}
+	pent->v.owner = pentOwner;
+	pent->v.origin = vecOrigin;
+	pent->v.angles = vecAngles;
+	DispatchSpawn( pent );
+	return pent;
 }
