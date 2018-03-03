@@ -1,0 +1,1 @@
+bond -condebug -windowed -game sandpit +developer 2 +console 1

@@ -171,7 +171,13 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 
 			Vector position = pEntity->v.origin + gpGlobals->v_forward * 128;
 
-			Create( ppcmd[2], position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
+			edict_t *pCreated = Create( ppcmd[2], position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
+
+			if( pCreated )
+			{
+				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
+				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
+			}
 		}
 	}
 
