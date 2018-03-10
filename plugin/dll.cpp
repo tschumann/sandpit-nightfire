@@ -52,7 +52,9 @@ int DispatchSpawn( edict_t *pent )
 		// item_generic (seemingly?)
 		PRECACHE_SOUND("misc/icicle_break.wav");
 
+		// for setting props to
 		PRECACHE_MODEL("models/basket1.mdl");
+		PRECACHE_MODEL("models/cart.mdl");
 		PRECACHE_MODEL("models/shuttle.mdl");
 	}
 
@@ -182,22 +184,26 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 			{
 				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
 				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
+				ALERT( at_console, "health: %d\n", pCreated->v.health );
+				ALERT( at_console, "flags: %d\n", pCreated->v.flags );
 			}
 		}
 	}
 	else if ( FStrEq(ppcmd[0], "prop_create") )
 	{
+		// if a model name was passed in
 		if( ppcmd[2] )
 		{
 			UTIL_MakeVectors( Vector( 0, pEntity->v.v_angle.y, 0 ) );
 
 			Vector position = pEntity->v.origin + gpGlobals->v_forward * 128;
 
+			// attempt to create an item_generic
 			edict_t *pCreated = Create( "item_generic", position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
 
-			ALERT( at_console, "setting model to %s\n", ppcmd[2] );
-
-			SET_MODEL( pCreated, ppcmd[2] );
+#if DEBUG
+			ALERT( at_console, "Setting item_generic model to %s\n", ppcmd[2] );
+#endif
 
 			if( pCreated )
 			{
@@ -205,25 +211,11 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
 				ALERT( at_console, "health: %d\n", pCreated->v.health );
 				ALERT( at_console, "flags: %d\n", pCreated->v.flags );
-				pCreated->v.flags &= ~FL_KILLME;
-			}
-		}
-	}
-	else if ( FStrEq(ppcmd[0], "ent_report") )
-	{
-		int i = 0;
-		while (true)
-		{
-			edict_t *pEdict = g_engfuncs.pfnPEntityOfEntIndex(i);
 
-			if (pEdict)
-			{
-				ALERT( at_console, "entity %d: %s\n", i, STRING(pEdict->v.classname) );
-				i++;
-			}
-			else
-			{
-				break;
+				// set its model to what the player requested
+				SET_MODEL( pCreated, ppcmd[2] );
+				// unset the killme flag so the game doesn't immediately remove it
+				pCreated->v.flags &= ~FL_KILLME;
 			}
 		}
 	}
