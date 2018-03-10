@@ -28,9 +28,9 @@ int DispatchSpawn( edict_t *pent )
 
 	if( !strcmp( szClassname, "worldspawn" ) )
 	{
+		// enemy_ninja
 		PRECACHE_MODEL("models/ninja.mdl");
 		PRECACHE_MODEL("models/shell.mdl");
-
 		PRECACHE_SOUND("weapons/mp9_fire_sil1.wav");
 		PRECACHE_SOUND("weapons/mp9_fire_sil2.wav");
 		PRECACHE_SOUND("debris/beamstart1.wav");
@@ -47,8 +47,13 @@ int DispatchSpawn( edict_t *pent )
 		PRECACHE_SOUND("ninja/nj_walk4.wav");
 		PRECACHE_SOUND("ninja/swing.wav");
 		PRECACHE_SOUND("ninja/swing2.wav");
-
 		PRECACHE_EVENT( 1, "events/createsmoke.sc" );
+
+		// item_generic (seemingly?)
+		PRECACHE_SOUND("misc/icicle_break.wav");
+
+		PRECACHE_MODEL("models/basket1.mdl");
+		PRECACHE_MODEL("models/shuttle.mdl");
 	}
 
 	return (*gFunctionTable.pfnSpawn)(pent);
@@ -151,7 +156,7 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 		if( pEntity )
 		{
 			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
-			// ALERT( at_console, "health: %d\n", pEntity->v.health );
+			ALERT( at_console, "health: %d\n", pEntity->v.health );
 			ALERT( at_console, "origin: %f, %f, %f\n", pEntity->v.origin.x, pEntity->v.origin.y, pEntity->v.origin.z );
 			ALERT( at_console, "angles: %f, %f, %f\n", pEntity->v.angles.x, pEntity->v.angles.y, pEntity->v.angles.z );
 			ALERT( at_console, "v_angle: %f, %f, %f\n", pEntity->v.v_angle.x, pEntity->v.v_angle.y, pEntity->v.v_angle.z );
@@ -177,6 +182,48 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 			{
 				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
 				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
+			}
+		}
+	}
+	else if ( FStrEq(ppcmd[0], "prop_create") )
+	{
+		if( ppcmd[2] )
+		{
+			UTIL_MakeVectors( Vector( 0, pEntity->v.v_angle.y, 0 ) );
+
+			Vector position = pEntity->v.origin + gpGlobals->v_forward * 128;
+
+			edict_t *pCreated = Create( "item_generic", position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
+
+			ALERT( at_console, "setting model to %s\n", ppcmd[2] );
+
+			SET_MODEL( pCreated, ppcmd[2] );
+
+			if( pCreated )
+			{
+				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
+				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
+				ALERT( at_console, "health: %d\n", pCreated->v.health );
+				ALERT( at_console, "flags: %d\n", pCreated->v.flags );
+				pCreated->v.flags &= ~FL_KILLME;
+			}
+		}
+	}
+	else if ( FStrEq(ppcmd[0], "ent_report") )
+	{
+		int i = 0;
+		while (true)
+		{
+			edict_t *pEdict = g_engfuncs.pfnPEntityOfEntIndex(i);
+
+			if (pEdict)
+			{
+				ALERT( at_console, "entity %d: %s\n", i, STRING(pEdict->v.classname) );
+				i++;
+			}
+			else
+			{
+				break;
 			}
 		}
 	}

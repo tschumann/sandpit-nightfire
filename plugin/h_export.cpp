@@ -39,6 +39,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 	}
 
 	static_assert(offsetof(edict_t, v) == 288, "edict_t.v must be at offset 288");
+	static_assert(offsetof(entvars_t, health) == 352, "entvars_t.health must be at offset 352");
 
 	return TRUE;
 }
