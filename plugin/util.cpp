@@ -7,6 +7,23 @@
 #include "util.h"
 #include "dll.h"
 
+extern int gmsgTextMsg;
+
+// from Half-Life's util.cpp
+#ifdef	DEBUG
+edict_t *DBG_EntOfVars( const entvars_t *pev )
+{
+	if (pev->pContainingEntity != NULL)
+		return pev->pContainingEntity;
+	ALERT(at_console, "entvars_t pContainingEntity is NULL, calling into engine");
+	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
+	if (pent == NULL)
+		ALERT(at_console, "DAMN!  Even the engine couldn't FindEntityByVars!");
+	((entvars_t *)pev)->pContainingEntity = pent;
+	return pent;
+}
+#endif //DEBUG
+
 // from Half-Life's util.cpp
 void UTIL_MakeVectors( const Vector &vecAngles )
 {
@@ -23,6 +40,25 @@ void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTE
 void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr )
 {
 	TRACE_LINE( vecStart, vecEnd, 0, (igmon == ignore_monsters ? TRUE : FALSE), pentIgnore, ptr );
+}
+
+// from Half-Life's util.cpp
+void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, const char *param1, const char *param2, const char *param3, const char *param4 )
+{
+	MESSAGE_BEGIN( MSG_ONE, gmsgTextMsg, NULL, client );
+		WRITE_BYTE( msg_dest );
+		WRITE_STRING( msg_name );
+
+		if ( param1 )
+			WRITE_STRING( param1 );
+		if ( param2 )
+			WRITE_STRING( param2 );
+		if ( param3 )
+			WRITE_STRING( param3 );
+		if ( param4 )
+			WRITE_STRING( param4 );
+
+	MESSAGE_END();
 }
 
 // custom code

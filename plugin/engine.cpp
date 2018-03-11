@@ -8,7 +8,9 @@
 
 extern enginefuncs_t g_engfuncs;
 
+// ShowMenu isn't implmented on the client-side
 int gmsgShowMenu = 0;
+int gmsgTextMsg = 0;
 
 void MessageBegin(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed)
 {
@@ -37,6 +39,13 @@ int RegUserMsg(const char *pszName, int iSize)
 		ALERT( at_console, "Caught ShowMenu\n" );
 #endif
 		gmsgShowMenu = msg;
+	}
+	else if( !strcmp(pszName, "TextMsg") )
+	{
+#if DEBUG
+		ALERT( at_console, "Caught TextMsg\n" );
+#endif
+		gmsgTextMsg = msg;
 	}
 
 	return msg;
