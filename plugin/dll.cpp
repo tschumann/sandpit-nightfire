@@ -9,6 +9,8 @@
 extern enginefuncs_t g_engfuncs;
 extern globalvars_t  *gpGlobals;
 
+extern int gmsgShowMenu;
+
 DLL_FUNCTIONS gFunctionTable;
 
 cvar_t *sv_canspawnmonsters = nullptr;
@@ -215,6 +217,17 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 				DROP_TO_FLOOR( pCreated );
 			}
 		}
+
+		return;
+	}
+	else if ( FStrEq(ppcmd[0], "propmenu") )
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgShowMenu, NULL, pEntity);
+			WRITE_SHORT(0x1F);
+			WRITE_CHAR(-1);
+			WRITE_BYTE(0);
+			WRITE_STRING("Spawn Prop\n\n1. models/basket1.mdl\n2. models/ninja.mdl\n3. models/shuttle.mdl\n4. CANCEL");
+		MESSAGE_END();
 
 		return;
 	}
