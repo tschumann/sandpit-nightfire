@@ -17,8 +17,6 @@ void GameDLLInit( void )
 {
 	sv_canspawnmonsters = CVAR_REGISTER(cvar_bool, "sv_canspawnmonsters", "Whether monsters can be spawned", "1", 0);
 
-	ALERT( at_console, "%d %d %f %x\n", sv_canspawnmonsters->u1, sv_canspawnmonsters->flags, sv_canspawnmonsters->value );
-
 	(*gFunctionTable.pfnGameInit)();
 }
 
@@ -182,12 +180,14 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 
 			if( pCreated )
 			{
-				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
-				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
-				ALERT( at_console, "health: %d\n", pCreated->v.health );
-				ALERT( at_console, "flags: %d\n", pCreated->v.flags );
+				// unset the killme flag so the game doesn't immediately remove it
+				pCreated->v.flags &= ~FL_KILLME;
+				// for some reason the spawned entity sits above the ground
+				DROP_TO_FLOOR( pCreated );
 			}
 		}
+
+		return;
 	}
 	else if ( FStrEq(ppcmd[0], "prop_create") )
 	{
@@ -207,17 +207,16 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 
 			if( pCreated )
 			{
-				ALERT( at_console, "classname: %s\n", STRING(pCreated->v.classname) );
-				ALERT( at_console, "origin: %f, %f, %f\n", pCreated->v.origin.x, pCreated->v.origin.y, pCreated->v.origin.z );
-				ALERT( at_console, "health: %d\n", pCreated->v.health );
-				ALERT( at_console, "flags: %d\n", pCreated->v.flags );
-
 				// set its model to what the player requested
 				SET_MODEL( pCreated, ppcmd[2] );
 				// unset the killme flag so the game doesn't immediately remove it
 				pCreated->v.flags &= ~FL_KILLME;
+				// for some reason the spawned entity sits above the ground
+				DROP_TO_FLOOR( pCreated );
 			}
 		}
+
+		return;
 	}
 
 	(*gFunctionTable.pfnClientCommand)(pEntity, u1, ppcmd);

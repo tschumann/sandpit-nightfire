@@ -1,5 +1,11 @@
+/***
+*
+*
+****/
 
 #include "enginecallback.h"
+
+// from Half-Life's util.h
 
 // More explicit than "int"
 typedef int EOFFSET;
@@ -72,6 +78,8 @@ typedef enum { ignore_monsters=1, dont_ignore_monsters=0, missile=2 } IGNORE_MON
 typedef enum { ignore_glass=1, dont_ignore_glass=0 } IGNORE_GLASS;
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
+
+// custom code
 
 extern edict_t *FindEntityForward( edict_t *pMe );
 extern edict_t* Create( const char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner );

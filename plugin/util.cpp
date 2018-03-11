@@ -1,3 +1,7 @@
+/***
+*
+*
+****/
 
 #include "extdll.h"
 #include "util.h"
@@ -20,6 +24,8 @@ void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTE
 {
 	TRACE_LINE( vecStart, vecEnd, 0, (igmon == ignore_monsters ? TRUE : FALSE), pentIgnore, ptr );
 }
+
+// custom code
 
 edict_t *FindEntityForward( edict_t *pMe )
 {

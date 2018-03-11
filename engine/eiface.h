@@ -132,7 +132,7 @@ typedef struct enginefuncs_s
 	edict_t*	(*pfnCreateNamedEntity)		(int className);
 	void*		(*pfnUnknown26)				(void *u1);
 	void*		(*pfnUnknown27)				(void *u1);
-	void*		(*pfnUnknown28)				(void *u1);
+	int			(*pfnDropToFloor)			(edict_t* e);
 	void*		(*pfnUnknown29)				(void *u1, void *u2);
 	void		(*pfnSetOrigin)				(edict_t *e, const float *rgflOrigin);
 	void		(*pfnEmitSound)				(edict_t *entity, int channel, const char *sample, float volume, float attenuation, int fFlags, int pitch);
