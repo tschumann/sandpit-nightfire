@@ -212,7 +212,7 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 			// check if it's a model that will have been precached
 			for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
 			{
-				if( !stricmp(ppcmd[2], props[i].szPath) )
+				if( !_stricmp(ppcmd[2], props[i].szPath) )
 				{
 					bValidModel = true;
 					break;
@@ -259,8 +259,26 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 	}
 	else if ( FStrEq(ppcmd[0], "propmenu") )
 	{
-		// TODO: construct from props array
-		ClientPrint( &pEntity->v, HUD_PRINTCENTER, "Allowed models:\nmodels/basket1.mdl\nmodels/shuttle.mdl" );
+		unsigned int iLength = 0;
+
+		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		{
+			// +1 for a trailing newline
+			iLength += ( strlen(props[i].szPath) + 1 );
+		}
+
+		char *szLeadingText = "Allowed models:\n";
+		char *pAllowedModelOutput = new char[strlen(szLeadingText) + iLength];
+
+		strcat( pAllowedModelOutput, szLeadingText );
+
+		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		{
+			strcat( pAllowedModelOutput, props[i].szPath );
+			strcat( pAllowedModelOutput, "\n" );
+		}
+
+		ClientPrint( &pEntity->v, HUD_PRINTCENTER, pAllowedModelOutput );
 
 		return;
 	}
