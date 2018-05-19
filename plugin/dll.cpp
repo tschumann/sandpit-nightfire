@@ -5,15 +5,26 @@
 
 #include "extdll.h"
 #include "util.h"
+#include "engine.h"
 
 extern enginefuncs_t g_engfuncs;
 extern globalvars_t  *gpGlobals;
 
-extern int gmsgShowMenu;
-
 DLL_FUNCTIONS gFunctionTable;
 
 cvar_t *sv_canspawnmonsters = nullptr;
+
+struct prop_t
+{
+	char *szPath;
+};
+
+prop_t props[] = {
+	{ "models/basket1.mdl" },
+	{ "models/cart.mdl" },
+	{ "models/shuttle.mdl" },
+	{ "models/ninja.mdl" }
+};
 
 void GameDLLInit( void )
 {
@@ -52,10 +63,10 @@ int DispatchSpawn( edict_t *pent )
 		// item_generic (seemingly?)
 		PRECACHE_SOUND("misc/icicle_break.wav");
 
-		// for setting props to
-		PRECACHE_MODEL("models/basket1.mdl");
-		PRECACHE_MODEL("models/cart.mdl");
-		PRECACHE_MODEL("models/shuttle.mdl");
+		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		{
+			PRECACHE_MODEL(props[i].szPath);
+		}
 	}
 
 	return (*gFunctionTable.pfnSpawn)(pent);
@@ -193,9 +204,27 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 	}
 	else if ( FStrEq(ppcmd[0], "prop_create") )
 	{
+		bool bValidModel = false;
+
 		// if a model name was passed in
 		if( ppcmd[2] )
 		{
+			// check if it's a model that will have been precached
+			for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+			{
+				if( !stricmp(ppcmd[2], props[i].szPath) )
+				{
+					bValidModel = true;
+					break;
+				}
+			}
+
+			if( !bValidModel )
+			{
+				ALERT( at_error, "Not spawning %s as it is not precached\n", ppcmd[2] );
+				return;
+			}
+
 			UTIL_MakeVectors( Vector( 0, pEntity->v.v_angle.y, 0 ) );
 
 			Vector position = pEntity->v.origin + gpGlobals->v_forward * 128;
@@ -216,12 +245,21 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 				// for some reason the spawned entity sits above the ground
 				DROP_TO_FLOOR( pCreated );
 			}
+			else
+			{
+				ALERT( at_error, "Unable to create item_generic - Create returned NULL\n" );
+			}
+		}
+		else
+		{
+			ALERT( at_error, "prop_create needs a model path\n" );
 		}
 
 		return;
 	}
 	else if ( FStrEq(ppcmd[0], "propmenu") )
 	{
+		// TODO: construct from props array
 		ClientPrint( &pEntity->v, HUD_PRINTCENTER, "Allowed models:\nmodels/basket1.mdl\nmodels/shuttle.mdl" );
 
 		return;

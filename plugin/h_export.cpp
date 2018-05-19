@@ -5,8 +5,6 @@
 
 #include "extdll.h"
 #include "enginecallback.h"
-#include "util.h"
-#include "studio.h"
 
 #include "engine.h"
 #include "dll.h"
@@ -59,8 +57,7 @@ void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t
 		ALERT( at_error, "Library not found!" );
 	}
 
-	// possibly override engine functions - these should probably call
-	// the actual engine function as part of their implementation
+	// override engine functions
 	pengfuncsFromEngine->pfnMessageBegin = MessageBegin;
 	pengfuncsFromEngine->pfnMessageEnd = MessageEnd;
 	pengfuncsFromEngine->pfnRegUserMsg = RegUserMsg;
