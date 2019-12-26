@@ -39,7 +39,7 @@ int DispatchSpawn( edict_t *pent )
 
 	if( !strcmp( szClassname, "worldspawn" ) )
 	{
-		// enemy_ninja
+		// assets required for enemy_ninja
 		PRECACHE_MODEL("models/ninja.mdl");
 		PRECACHE_MODEL("models/shell.mdl");
 		PRECACHE_SOUND("weapons/mp9_fire_sil1.wav");
@@ -60,9 +60,10 @@ int DispatchSpawn( edict_t *pent )
 		PRECACHE_SOUND("ninja/swing2.wav");
 		PRECACHE_EVENT( 1, "events/createsmoke.sc" );
 
-		// item_generic (seemingly?)
+		// assets required for item_generic (apparently?)
 		PRECACHE_SOUND("misc/icicle_break.wav");
 
+		// precache some other stuff
 		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
 		{
 			PRECACHE_MODEL(props[i].szPath);
@@ -164,20 +165,30 @@ void ClientPutInServer( edict_t *pEntity )
 
 void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 {
-	if( FStrEq(ppcmd[0], "get_player_info") )
+	if ( FStrEq(ppcmd[0], "propmenu") )
 	{
-		if( pEntity )
+		unsigned int iLength = 0;
+
+		for( int i = 0; i < sizeof(props) / sizeof(props[0]); i++ )
 		{
-			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
-			ALERT( at_console, "health: %d\n", pEntity->v.health );
-			ALERT( at_console, "origin: %f, %f, %f\n", pEntity->v.origin.x, pEntity->v.origin.y, pEntity->v.origin.z );
-			ALERT( at_console, "angles: %f, %f, %f\n", pEntity->v.angles.x, pEntity->v.angles.y, pEntity->v.angles.z );
-			ALERT( at_console, "v_angle: %f, %f, %f\n", pEntity->v.v_angle.x, pEntity->v.v_angle.y, pEntity->v.v_angle.z );
+			// +1 for a trailing newline
+			iLength += (strlen(props[i].szPath) + 1);
 		}
-		else
+
+		char* szLeadingText = "Allowed models:\n";
+		char* pAllowedModelOutput = new char[strlen(szLeadingText) + iLength];
+
+		strcat( pAllowedModelOutput, szLeadingText );
+
+		for( int i = 0; i < sizeof(props) / sizeof(props[0]); i++ )
 		{
-			ALERT( at_console, "no entity" );
+			strcat(pAllowedModelOutput, props[i].szPath);
+			strcat(pAllowedModelOutput, "\n");
 		}
+
+		ClientPrint( &pEntity->v, HUD_PRINTCENTER, pAllowedModelOutput );
+
+		delete[] pAllowedModelOutput;
 
 		return;
 	}
@@ -257,31 +268,25 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 
 		return;
 	}
-	else if ( FStrEq(ppcmd[0], "propmenu") )
+#if DEBUG
+	else if ( FStrEq(ppcmd[0], "get_player_info") )
 	{
-		unsigned int iLength = 0;
-
-		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		if( pEntity )
 		{
-			// +1 for a trailing newline
-			iLength += ( strlen(props[i].szPath) + 1 );
+			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
+			ALERT( at_console, "health: %d\n", pEntity->v.health );
+			ALERT( at_console, "origin: %f, %f, %f\n", pEntity->v.origin.x, pEntity->v.origin.y, pEntity->v.origin.z );
+			ALERT( at_console, "angles: %f, %f, %f\n", pEntity->v.angles.x, pEntity->v.angles.y, pEntity->v.angles.z );
+			ALERT( at_console, "v_angle: %f, %f, %f\n", pEntity->v.v_angle.x, pEntity->v.v_angle.y, pEntity->v.v_angle.z );
 		}
-
-		char *szLeadingText = "Allowed models:\n";
-		char *pAllowedModelOutput = new char[strlen(szLeadingText) + iLength];
-
-		strcat( pAllowedModelOutput, szLeadingText );
-
-		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		else
 		{
-			strcat( pAllowedModelOutput, props[i].szPath );
-			strcat( pAllowedModelOutput, "\n" );
+			ALERT( at_console, "no entity" );
 		}
-
-		ClientPrint( &pEntity->v, HUD_PRINTCENTER, pAllowedModelOutput );
 
 		return;
 	}
+#endif
 
 	(*gFunctionTable.pfnClientCommand)(pEntity, u1, ppcmd);
 }

@@ -16,9 +16,6 @@ HINSTANCE h_Library = nullptr;
 enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;
 
-#undef DLLEXPORT
-#define DLLEXPORT __stdcall
-
 extern DLL_FUNCTIONS gFunctionTable;
 
 typedef int (FAR *GETENTITYAPI)(DLL_FUNCTIONS *, int *);
@@ -55,6 +52,8 @@ void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t
 	if( h_Library == NULL )
 	{
 		ALERT( at_error, "Library not found!" );
+
+		return;
 	}
 
 	// override engine functions
@@ -138,5 +137,3 @@ extern "C" _declspec( dllexport ) int GetNewDLLFunctions( NEW_DLL_FUNCTIONS *pFu
 {
 	return (*(GETNEWDLLFUNCTIONS)GetProcAddress( h_Library, "GetNewDLLFunctions" ))(pFunctionTable, interfaceVersion);
 }
-
-
