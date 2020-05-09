@@ -1,5 +1,15 @@
 /***
 *
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
 *
 ****/
 
@@ -9,7 +19,6 @@
 
 extern int gmsgTextMsg;
 
-// from Half-Life's util.cpp
 #ifdef	DEBUG
 edict_t *DBG_EntOfVars( const entvars_t *pev )
 {
@@ -24,25 +33,21 @@ edict_t *DBG_EntOfVars( const entvars_t *pev )
 }
 #endif //DEBUG
 
-// from Half-Life's util.cpp
 void UTIL_MakeVectors( const Vector &vecAngles )
 {
 	MAKE_VECTORS( vecAngles );
 }
 
-// from Half-Life's util.cpp
 void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr )
 {
 	TRACE_LINE( vecStart, vecEnd, 0, (igmon == ignore_monsters ? TRUE : FALSE) | (ignoreGlass?0x100:0), pentIgnore, ptr );
 }
 
-// from Half-Life's util.cpp
 void UTIL_TraceLine( const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr )
 {
 	TRACE_LINE( vecStart, vecEnd, 0, (igmon == ignore_monsters ? TRUE : FALSE), pentIgnore, ptr );
 }
 
-// from Half-Life's util.cpp
 void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, const char *param1, const char *param2, const char *param3, const char *param4 )
 {
 	MESSAGE_BEGIN( MSG_ONE, gmsgTextMsg, NULL, client );

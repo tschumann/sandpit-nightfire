@@ -1,7 +1,8 @@
-/***
-*
-*
-****/
+//
+// Sandpit Nightfire
+//
+// (http://www.teamsandpit.com/)
+//
 
 #ifndef DLL_H
 #define DLL_H

@@ -1,7 +1,8 @@
-/***
-*
-*
-****/
+//
+// Sandpit Nightfire
+//
+// (http://www.teamsandpit.com/)
+//
 
 #include "extdll.h"
 #include "enginecallback.h"
