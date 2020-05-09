@@ -8,6 +8,8 @@
 #include "util.h"
 #include "engine.h"
 
+#include <string>
+
 extern enginefuncs_t g_engfuncs;
 extern globalvars_t  *gpGlobals;
 
@@ -20,7 +22,9 @@ struct prop_t
 	char *szPath;
 };
 
-prop_t props[] = {
+const int PROPS_SIZE = 4;
+
+prop_t props[PROPS_SIZE] = {
 	{ "models/basket1.mdl" },
 	{ "models/cart.mdl" },
 	{ "models/shuttle.mdl" },
@@ -168,28 +172,15 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 {
 	if ( FStrEq(ppcmd[0], "propmenu") )
 	{
-		unsigned int iLength = 0;
+		std::string output = "Allowed models:\n";
 
-		for( int i = 0; i < sizeof(props) / sizeof(props[0]); i++ )
+		for( int i = 0; i < PROPS_SIZE; i++ )
 		{
-			// +1 for a trailing newline
-			iLength += (strlen(props[i].szPath) + 1);
+			output += props[i].szPath;
+			output += "\n";
 		}
 
-		char* szLeadingText = "Allowed models:\n";
-		char* pAllowedModelOutput = new char[strlen(szLeadingText) + iLength];
-
-		strcat( pAllowedModelOutput, szLeadingText );
-
-		for( int i = 0; i < sizeof(props) / sizeof(props[0]); i++ )
-		{
-			strcat(pAllowedModelOutput, props[i].szPath);
-			strcat(pAllowedModelOutput, "\n");
-		}
-
-		ClientPrint( &pEntity->v, HUD_PRINTCENTER, pAllowedModelOutput );
-
-		delete[] pAllowedModelOutput;
+		ClientPrint( &pEntity->v, HUD_PRINTCENTER, output.c_str() );
 
 		return;
 	}
