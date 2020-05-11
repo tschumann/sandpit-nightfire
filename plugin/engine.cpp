@@ -25,27 +25,23 @@ void MessageEnd(void)
 
 int RegUserMsg(const char *pszName, int iSize)
 {
-#if DEBUG
 	if( CVAR_GET_FLOAT("developer") )
 	{
 		ALERT( at_console, "pfnRegUserMsg: pszName=%s, iSize=%d\n", pszName, iSize );
 	}
-#endif
 
 	int msg = (*g_engfuncs.pfnRegUserMsg)(pszName, iSize);
 
 	if( !strcmp(pszName, "ShowMenu") )
 	{
-#if DEBUG
-		ALERT( at_console, "Caught ShowMenu\n" );
-#endif
+		ALERT( at_console, "Caught ShowMenu message registration\n" );
+
 		gmsgShowMenu = msg;
 	}
 	else if( !strcmp(pszName, "TextMsg") )
 	{
-#if DEBUG
-		ALERT( at_console, "Caught TextMsg\n" );
-#endif
+		ALERT( at_console, "Caught TextMsg message registration\n" );
+
 		gmsgTextMsg = msg;
 	}
 

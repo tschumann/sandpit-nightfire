@@ -235,9 +235,7 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 			// attempt to create an item_generic
 			edict_t *pCreated = Create( "item_generic", position, Vector( 0, pEntity->v.angles.y, 0 ), pEntity );
 
-#if DEBUG
 			ALERT( at_console, "Setting item_generic model to %s\n", ppcmd[2] );
-#endif
 
 			if( pCreated )
 			{
@@ -263,6 +261,7 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 #if DEBUG
 	else if ( FStrEq(ppcmd[0], "get_player_info") )
 	{
+		// get information about the current player
 		if( pEntity )
 		{
 			ALERT( at_console, "classname: %s\n", STRING(pEntity->v.classname) );
