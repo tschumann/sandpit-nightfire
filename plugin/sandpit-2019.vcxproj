@@ -147,20 +147,20 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\dlls\util.cpp" />
     <ClCompile Include="dll.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="h_export.cpp" />
     <ClCompile Include="linkfunc.cpp" />
-    <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dlls\cdll_dll.h" />
     <ClInclude Include="..\dlls\enginecallback.h" />
     <ClInclude Include="..\dlls\extdll.h" />
+    <ClInclude Include="..\dlls\util.h" />
     <ClInclude Include="..\dlls\vector.h" />
     <ClInclude Include="dll.h" />
     <ClInclude Include="engine.h" />
-    <ClInclude Include="util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

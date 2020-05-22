@@ -15,7 +15,7 @@
 
 #include "extdll.h"
 #include "util.h"
-#include "dll.h"
+#include "../plugin/dll.h"
 
 extern int gmsgTextMsg;
 
