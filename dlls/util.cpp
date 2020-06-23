@@ -90,7 +90,7 @@ edict_t* Create( const char *szName, const Vector &vecOrigin, const Vector &vecA
 	pent = CREATE_NAMED_ENTITY( MAKE_STRING( szName ));
 	if ( FNullEnt( pent ) )
 	{
-		ALERT ( at_console, "NULL Ent in Create!\n" );
+		ALERT( at_console, "NULL Ent in Create!\n" );
 		return NULL;
 	}
 	pent->v.owner = pentOwner;

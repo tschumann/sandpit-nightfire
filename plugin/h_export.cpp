@@ -10,8 +10,6 @@
 #include "engine.h"
 #include "dll.h"
 
-#include <io.h>
-
 HINSTANCE h_Library = nullptr;
 
 enginefuncs_t g_engfuncs;
@@ -34,6 +32,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 		}
 	}
 
+	// make sure the layout of important structs is correct
 	static_assert(offsetof(edict_t, v) == 288, "edict_t.v must be at offset 288");
 	static_assert(offsetof(entvars_t, health) == 352, "entvars_t.health must be at offset 352");
 
@@ -52,7 +51,7 @@ void DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEngine, globalvars_t
 
 	if( h_Library == NULL )
 	{
-		ALERT( at_error, "Library not found!" );
+		ALERT( at_error, "Library not found!\n" );
 
 		return;
 	}

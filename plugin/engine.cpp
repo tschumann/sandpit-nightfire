@@ -9,7 +9,7 @@
 
 extern enginefuncs_t g_engfuncs;
 
-// ShowMenu isn't implmented on the client-side
+// ShowMenu isn't implmented in client.dll
 int gmsgShowMenu = 0;
 int gmsgTextMsg = 0;
 

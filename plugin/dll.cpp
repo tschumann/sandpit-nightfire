@@ -69,7 +69,7 @@ int DispatchSpawn( edict_t *pent )
 		PRECACHE_SOUND("misc/icicle_break.wav");
 
 		// precache some other stuff
-		for( int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
+		for( unsigned int i = 0; i < sizeof(props)/sizeof(props[0]); i++ )
 		{
 			PRECACHE_MODEL(props[i].szPath);
 		}

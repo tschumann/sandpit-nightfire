@@ -4,7 +4,7 @@ Sandpit Nightfire
 Name: Sandpit Nightfire
 Description: A sandbox plugin for 007 Nightfire.
 Requirements: 007 Nightfire
-Installation: Copy the files into your Nightfire/ directory
+Installation: Copy the files into your Nightfire/ directory and run sandpit.bat
 
 == Changelog ==
 
