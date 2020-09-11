@@ -6,9 +6,14 @@ Description: A sandbox plugin for 007 Nightfire.
 Requirements: 007 Nightfire
 Installation: Copy the files into your Nightfire/ directory and run sandpit.bat
 
+== Help ==
+
+propmenu - show what can be spawned
+prop_create models/blah.mdl - spawn blah.mdl
+
 == Changelog ==
 
-v0.1 (??/??/??)
+v0.1 (11/09/2020)
 - Initial release.
 
 == End User License Agreement ==

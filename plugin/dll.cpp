@@ -258,7 +258,7 @@ void ClientCommand( edict_t *pEntity, int u1, const char **ppcmd )
 
 		return;
 	}
-#if DEBUG
+#if 0
 	else if ( FStrEq(ppcmd[0], "get_player_info") )
 	{
 		// get information about the current player

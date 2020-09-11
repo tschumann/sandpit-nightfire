@@ -2,3 +2,7 @@
 If the compiler complains about an invalid .map file make sure all the brushes have textures - if they don't the texture field in the .map file will be empty and bbsp will trip up when trying to parse it.
 
 config.cfg is stored at C:\Users\user\AppData\Local\Gearbox Software\Nightfire
+
+For some reason propmenu doesn't work in Release mode.
+
+How do you take a screenshot?
